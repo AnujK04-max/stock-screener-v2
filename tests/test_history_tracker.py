@@ -53,7 +53,7 @@ def test_select_non_overlapping_cohorts():
 def test_tracker_summary_preliminary_and_evaluable():
     rng = np.random.default_rng(7)
     idx = pd.bdate_range("2025-01-01", periods=140)
-    tickers = [f"STK{i:02d}" for i in range(25)]
+    tickers = [f"STK{i:02d}" for i in range(35)]
     close_df = pd.DataFrame(
         100.0 * np.exp(np.cumsum(rng.normal(0.0008, 0.015, size=(len(idx), len(tickers))), axis=0)),
         index=idx,
@@ -68,9 +68,9 @@ def test_tracker_summary_preliminary_and_evaluable():
     rows = []
     for d_idx, dt in enumerate(trading_dates):
         for s_idx, tk in enumerate(tickers):
-            if s_idx < 5:
+            if s_idx < 7:
                 flag = "Passes Multi-Factor Screen"
-            elif s_idx < 20:
+            elif s_idx < 28:
                 flag = "Neutral / Watchlist"
             else:
                 flag = "Fails Screen / Lagging"
@@ -79,7 +79,7 @@ def test_tracker_summary_preliminary_and_evaluable():
                     "As_Of_Date": dt,
                     "Model_Version": MODEL_VERSION,
                     "Ticker": tk,
-                    "Composite_Score": round(90.0 - s_idx * 2.5 + (d_idx % 3) * 0.5, 2),
+                    "Composite_Score": round(90.0 - s_idx * 2.0 + (d_idx % 3) * 0.5, 2),
                     "Screen_Flag": flag,
                 }
             )
