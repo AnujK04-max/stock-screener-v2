@@ -1,6 +1,7 @@
 """tests/test_history_tracker.py - unit tests for history.py and tracker.py."""
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 
 from history import (
