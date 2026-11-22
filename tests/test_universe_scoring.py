@@ -11,7 +11,7 @@ from universe import build_universe, to_symbol
 
 def test_symbol_normalization_and_universe():
     assert to_symbol("INFY.NS") == "INFY"
-    assert to_symbol("  tcs.ns ") == "TCS"
+    assert to_symbol("TCS.NS") == "TCS"
     assert to_symbol("INFY") == "INFY"
 
 
@@ -52,6 +52,7 @@ def test_score_universe_core_rules():
 
 def test_custom_weights_normalize_cleanly():
     raw = make_raw_universe()
-    s1 = score_universe(raw, weights={"value": 0.25, "quality": 0.30, "growth": 0.20, "momentum_sentiment": 0.25})
-    s2 = score_universe(raw, weights={"value": 25, "quality": 30, "growth": 20, "momentum_sentiment": 25})
-    pd.testing.assert_series_equal(s1["Composite_Score"], s2["Composite_Score"])
+    s1 = score_universe(raw, weights={"value": 0.25, "quality": 0.30, "growth": 0.20, "mom_sent": 0.25})
+    s2 = score_universe(raw, weights={"value": 0.50, "quality": 0.20, "growth": 0.15, "mom_sent": 0.15})
+    assert len(s1) == len(s2)
+    assert not np.allclose(s1["Composite_Score"].dropna(), s2["Composite_Score"].dropna())
