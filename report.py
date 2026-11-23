@@ -227,10 +227,10 @@ def build_report_html(
   <section class="card" style="margin-top:16px;">
     <h2>Interactive Factor Weight Simulator</h2>
     <div class="controls">
-      <label>Value <input id="w-value" type="range" min="0" max="100" value="25" /></label>
-      <label>Quality <input id="w-quality" type="range" min="0" max="100" value="30" /></label>
-      <label>Growth <input id="w-growth" type="range" min="0" max="100" value="20" /></label>
-      <label>Mom+Sent <input id="w-mom" type="range" min="0" max="100" value="25" /></label>
+      <label>Value <span id="val-value">25 (25.0%, +0)</span> <input id="w-value" type="range" min="0" max="100" value="25" /></label>
+      <label>Quality <span id="val-quality">30 (30.0%, +0)</span> <input id="w-quality" type="range" min="0" max="100" value="30" /></label>
+      <label>Growth <span id="val-growth">20 (20.0%, +0)</span> <input id="w-growth" type="range" min="0" max="100" value="20" /></label>
+      <label>Mom+Sent <span id="val-mom">25 (25.0%, +0)</span> <input id="w-mom" type="range" min="0" max="100" value="25" /></label>
       <button type="button" id="reset-weights">Reset Weights</button>
     </div>
   </section>
@@ -325,17 +325,55 @@ def build_report_html(
       if (searchEl) searchEl.addEventListener("input", applyFilters);
       if (flagEl) flagEl.addEventListener("change", applyFilters);
 
-      const resetBtn = document.getElementById("reset-weights");
-      if (resetBtn) {{
-        resetBtn.addEventListener("click", () => {{
-          document.getElementById("w-value").value = 25;
-          document.getElementById("w-quality").value = 30;
-          document.getElementById("w-growth").value = 20;
-          document.getElementById("w-mom").value = 25;
-        }});
-      }}
-    }})();
-  </script>
-</body>
-</html>
-"""
+     const weightSpecs = [
+  {{ id: "w-value", outId: "val-value", def: 25 }},
+  {{ id: "w-quality", outId: "val-quality", def: 30 }},
+  {{ id: "w-growth", outId: "val-growth", def: 20 }},
+  {{ id: "w-mom", outId: "val-mom", def: 25 }}
+]];
+
+function syncWeights() {{
+  const vals = weightSpecs.map((w) => {{
+    const el = document.getElementById(w.id);
+    return el ? Math.max(0, Number(el.value) || 0) : w.def;
+  }});
+  const total = vals.reduce((sum, v) => sum + v, 0);
+
+  weightSpecs.forEach((w, i) => {{
+    const out = document.getElementById(w.outId);
+    const curr = vals[i];
+    const pct = total > 0 ? ((curr / total) * 100).toFixed(1) : "0.0";
+    const diff = curr - w.def;
+    const diffStr = diff > 0 ? `+${{diff}}` : `${{diff}}`;
+    if (out) {{
+      out.textContent = `${{curr}} (${{pct}}%, ${{diffStr}} vs default)`;
+    }}
+  }});
+}}
+
+weightSpecs.forEach((w) => {{
+  const el = document.getElementById(w.id);
+  if (el) el.addEventListener("input", syncWeights);
+}});
+syncWeights();
+
+const resetBtn = document.getElementById("reset-weights");
+if (resetBtn) {{
+  resetBtn.addEventListener("click", () => {{
+    document.getElementById("w-value").value = 25;
+    document.getElementById("w-quality").value = 30;
+    document.getElementById("w-growth").value = 20;
+    document.getElementById("w-mom").value = 25;
+    syncWeights();
+  }});
+}}
+
+<section class="card" style="margin-top:20px;">
+  <h2>Methodology &amp; Educational Disclaimer</h2>
+  <p class="sub" style="margin-top:8px; line-height:1.5;">
+    <strong>Methodology:</strong> Stocks are ranked across Value, Quality, Growth, and Momentum + FinBERT sentiment factors (model <code>2026.11.4</code>). Loss-making or negative-equity companies are marked Non-Rankable (<code>NM</code>), and forward performance cohorts are tracked against Nifty 50 benchmarks.
+  </p>
+  <p class="sub" style="margin-top:10px; line-height:1.5;">
+    <strong>Educational Purposes Only:</strong> Built strictly for educational and academic research purposes; nothing here constitutes financial, investment, or trading advice.
+  </p>
+</section>    
