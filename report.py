@@ -325,48 +325,48 @@ def build_report_html(
       if (searchEl) searchEl.addEventListener("input", applyFilters);
       if (flagEl) flagEl.addEventListener("change", applyFilters);
 
-     const weightSpecs = [
-  {{ id: "w-value", outId: "val-value", def: 25 }},
-  {{ id: "w-quality", outId: "val-quality", def: 30 }},
-  {{ id: "w-growth", outId: "val-growth", def: 20 }},
-  {{ id: "w-mom", outId: "val-mom", def: 25 }}
-]];
+      const weightSpecs = [
+        {{ id: "w-value", outId: "val-value", def: 25 }},
+        {{ id: "w-quality", outId: "val-quality", def: 30 }},
+        {{ id: "w-growth", outId: "val-growth", def: 20 }},
+        {{ id: "w-mom", outId: "val-mom", def: 25 }}
+      ]];
 
-function syncWeights() {{
-  const vals = weightSpecs.map((w) => {{
-    const el = document.getElementById(w.id);
-    return el ? Math.max(0, Number(el.value) || 0) : w.def;
-  }});
-  const total = vals.reduce((sum, v) => sum + v, 0);
+      function syncWeights() {{
+        const vals = weightSpecs.map((w) => {{
+          const el = document.getElementById(w.id);
+          return el ? Math.max(0, Number(el.value) || 0) : w.def;
+        }});
+        const total = vals.reduce((sum, v) => sum + v, 0);
 
-  weightSpecs.forEach((w, i) => {{
-    const out = document.getElementById(w.outId);
-    const curr = vals[i];
-    const pct = total > 0 ? ((curr / total) * 100).toFixed(1) : "0.0";
-    const diff = curr - w.def;
-    const diffStr = diff > 0 ? `+${{diff}}` : `${{diff}}`;
-    if (out) {{
-      out.textContent = `${{curr}} (${{pct}}%, ${{diffStr}} vs default)`;
-    }}
-  }});
-}}
+        weightSpecs.forEach((w, i) => {{
+          const out = document.getElementById(w.outId);
+          const curr = vals[i];
+          const pct = total > 0 ? ((curr / total) * 100).toFixed(1) : "0.0";
+          const diff = curr - w.def;
+          const diffStr = diff > 0 ? `+${{diff}}` : `${{diff}}`;
+          if (out) {{
+            out.textContent = `${{curr}} (${{pct}}%, ${{diffStr}} vs default)`;
+          }}
+        }});
+      }}
 
-weightSpecs.forEach((w) => {{
-  const el = document.getElementById(w.id);
-  if (el) el.addEventListener("input", syncWeights);
-}});
-syncWeights();
+      weightSpecs.forEach((w) => {{
+        const el = document.getElementById(w.id);
+        if (el) el.addEventListener("input", syncWeights);
+      }});
+      syncWeights();
 
-const resetBtn = document.getElementById("reset-weights");
-if (resetBtn) {{
-  resetBtn.addEventListener("click", () => {{
-    document.getElementById("w-value").value = 25;
-    document.getElementById("w-quality").value = 30;
-    document.getElementById("w-growth").value = 20;
-    document.getElementById("w-mom").value = 25;
-    syncWeights();
-  }});
-}}
+      const resetBtn = document.getElementById("reset-weights");
+      if (resetBtn) {{
+        resetBtn.addEventListener("click", () => {{
+          document.getElementById("w-value").value = 25;
+          document.getElementById("w-quality").value = 30;
+          document.getElementById("w-growth").value = 20;
+          document.getElementById("w-mom").value = 25;
+          syncWeights();
+        }});
+      }}
     }})();
   </script>
 
@@ -382,6 +382,3 @@ if (resetBtn) {{
 </body>
 </html>
 """
-    <strong>Educational Purposes Only:</strong> Built strictly for educational and academic research purposes; nothing here constitutes financial, investment, or trading advice.
-  </p>
-</section>    
