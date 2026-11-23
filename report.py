@@ -367,13 +367,21 @@ if (resetBtn) {{
     syncWeights();
   }});
 }}
+    }})();
+  </script>
 
-<section class="card" style="margin-top:20px;">
-  <h2>Methodology &amp; Educational Disclaimer</h2>
-  <p class="sub" style="margin-top:8px; line-height:1.5;">
-    <strong>Methodology:</strong> Stocks are ranked across Value, Quality, Growth, and Momentum + FinBERT sentiment factors (model <code>2026.11.4</code>). Loss-making or negative-equity companies are marked Non-Rankable (<code>NM</code>), and forward performance cohorts are tracked against Nifty 50 benchmarks.
-  </p>
-  <p class="sub" style="margin-top:10px; line-height:1.5;">
+  <section class="card" style="margin-top:20px;">
+    <h2>Methodology &amp; Educational Disclaimer</h2>
+    <p class="sub" style="margin-top:8px; line-height:1.5;">
+      <strong>Methodology:</strong> Stocks are ranked across Value, Quality, Growth, and Momentum + FinBERT sentiment factors (model <code>2026.11.4</code>). Loss-making or negative-equity companies are marked Non-Rankable (<code>NM</code>), and forward performance cohorts are tracked against Nifty 50 benchmarks.
+    </p>
+    <p class="sub" style="margin-top:10px; line-height:1.5;">
+      <strong>Educational Purposes Only:</strong> Built strictly for educational and academic research purposes; nothing here constitutes financial, investment, or trading advice.
+    </p>
+  </section>
+</body>
+</html>
+"""
     <strong>Educational Purposes Only:</strong> Built strictly for educational and academic research purposes; nothing here constitutes financial, investment, or trading advice.
   </p>
 </section>    
