@@ -1,0 +1,40 @@
+name: Run Indian Stock Screener v2
+
+on:
+  schedule:
+    # 4:00 PM IST = 10:30 AM UTC, Monday–Friday (clean post-close snapshot for Nifty 50 comparison)
+    - cron: "30 10 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  run-screener:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install huggingface_hub
+
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-finbert-${{ runner.os }}-${{ hashFiles('run_screener.py', 'requirements.txt') }}
+          restore-keys: |
+            hf-finbert-${{ runner.os }}-
+
+      - name: Run screener v2 and publish to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python run_screener.py --out-dir dist --hf-repo-id Anujk04/indian-stock-screener
